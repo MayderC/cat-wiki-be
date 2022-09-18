@@ -11,6 +11,12 @@ export class TopBreed {
   @Prop()
   total: number;
 
+  @Prop({default: ""})
+  id_reference : string
+
+  @Prop({default: ""})
+  image_url: string
+
 }
 
 export const TopBreedSchema = SchemaFactory.createForClass(TopBreed);

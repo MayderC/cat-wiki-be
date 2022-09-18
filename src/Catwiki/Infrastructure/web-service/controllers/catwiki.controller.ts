@@ -22,6 +22,13 @@ export class CatwikiController {
   async getImagesByBreed(@Query('breed') breed: string){
     return await this._catService.getImagesByBreed(breed)
   }
+ 
+
+  @Get('/breeds/top')
+  async getTopBreeds() {
+    return await this._catService.getTopBreeds(10)
+  }
+  
 
 }
 

@@ -6,5 +6,6 @@ export interface ICatwikiService {
   getBreeds(): Promise<any>
   getImagesByBreed(breed: string)
   getTopBreeds(top: number)
-  saveOrUpdateSearchBreed(breed: string)
+  saveOrUpdateSearchBreed(breed: string, id_reference?: string, url?: string)
+
 }
