@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { rmSync } from 'fs';
 import { Model } from 'mongoose';
-import { TopBreed, TopBreedDocument } from '../Infrastructure/database/topbreed.model';
-import { ICatwikiService } from './../Application/Ports/Services/ICatwikiService';
+import { TopBreed, TopBreedDocument } from '../../Infrastructure/database/topbreed.model';
+import { ICatwikiService } from '../../Application/Ports/Services/ICatwikiService';
 
 @Injectable()
 export class CatwikiServie implements ICatwikiService {
@@ -16,13 +16,13 @@ export class CatwikiServie implements ICatwikiService {
     ){}
 
 
-  async saveOrUpdateSearchBreed(breed: string, id_reference?: string, url?: string) {
+  async saveOrUpdateSearchBreed(breed: string, id_reference?: string, url?: string, description?: string) {
     const res = await this.topBreed.findOne({name: breed})
     if(res){
       await this.topBreed.findOneAndUpdate({name: breed}, {total: res.total+1 }, {new: true}).exec()
       return
     }
-   await this.topBreed.create({name: breed, total: 1, id_reference: id_reference, image_url: url})
+   await this.topBreed.create({name: breed, total: 1, id_reference: id_reference, image_url: url, description: description })
   }
 
 
@@ -34,7 +34,7 @@ export class CatwikiServie implements ICatwikiService {
     if(!id){
       const res = await this.httpService.axiosRef.get('/breeds/search?q=' + breed)
       const breedInfo = await this.httpService.axiosRef.get('/images/'+ res.data[0].reference_image_id)
-      this.saveOrUpdateSearchBreed(breed, res.data[0].reference_image_id, breedInfo.data.url )
+      this.saveOrUpdateSearchBreed(breed, res.data[0].reference_image_id, breedInfo.data.url, res.data[0].description )
       return breedInfo.data
     }
 
